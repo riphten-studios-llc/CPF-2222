@@ -7,9 +7,11 @@ public class PlayerController : MonoBehaviour {
 	public float rotationSpeed = 1080;
 	public float walkSpeed = 3;
 	public float runSpeed = 8;
+	public float accel = 5;
 
 	//System Variables
 	private Quaternion targetRotation;
+	private Vector3 currentVelocityMod;
 
 	//Required Components
 	public Gun gun;
@@ -41,6 +43,8 @@ public class PlayerController : MonoBehaviour {
 		transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
 
 		Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+
+		currentVelocityMod = Vector3.MoveTowards(currentVelocityMod, input, accel * Time.deltaTime);
 		Vector3 motion = input;
 		motion *= (Mathf.Abs(input.x) == 1 && Mathf.Abs(input.z) == 1) ? .7f : 1;
 		motion *= (Input.GetButton("Run")) ? runSpeed : walkSpeed;
@@ -57,6 +61,7 @@ public class PlayerController : MonoBehaviour {
 			transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
 		}
 
+		currentVelocityMod = Vector3.MoveTowards(currentVelocityMod, input, accel * Time.deltaTime);
 		Vector3 motion = input;
 		motion *= (Mathf.Abs(input.x) == 1 && Mathf.Abs(input.z) == 1) ? .7f : 1;
 		motion *= (Input.GetButton("Run")) ? runSpeed : walkSpeed;
